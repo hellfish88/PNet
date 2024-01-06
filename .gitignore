@@ -1,32 +1,19 @@
-# Prerequisites
-*.d
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+*
+!*.cpp
+!*.hpp
+!*.h
+!*.gitignore
+!*/
+!*.md
 
-# Precompiled Headers
-*.gch
-*.pch
+# Local History for Visual Studio Code
+.history/
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+# Built Visual Studio Code Extensionss
+*.vsix
 
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+.ionide
