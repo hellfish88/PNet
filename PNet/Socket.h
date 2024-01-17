@@ -20,13 +20,14 @@ namespace PNet {
 			PResult Bind(IPEndpoint endpoint);
 			PResult Listen(IPEndpoint endpoint, int backlog = 5);
 			PResult Accept(Socket& outSocket);
-			PResult  Connect(IPEndpoint endpoint);
+			PResult Connect(IPEndpoint endpoint);
 			PResult Send(const void* data, int numberOfBytes, int& bytesSent);
 			PResult Recv(void* destination, int numberOfBytes, int& bytesReceived);
 			PResult Send(Packet& packet);
 			PResult Recv(Packet& packet);
 			PResult SendAll(const void* data, int numberOfBytes);
 			PResult RecvAll(void* destination, int numberOfBytes);
+			PResult Setblocking(bool isBlocking);
 
 		private:
 			IPVersion ipversion = IPVersion::IPv4;

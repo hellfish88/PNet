@@ -7,8 +7,8 @@ bool Client::Connect(IPEndpoint ip) {
 		std::cout << "Winsock api successfully initialized." << std::endl;
 		socket = Socket(ip.GetIPVersion());
 		if (socket.Create() == PResult::P_Success) {
-			//if (socket.SetBlocking(true) != PResult::P_Success)
-			//	return false;
+			if (socket.Setblocking(true) != PResult::P_Success)
+				return false;
 
 
 			std::cout << "Socket successfully created." << std::endl;

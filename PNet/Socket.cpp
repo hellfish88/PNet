@@ -23,6 +23,10 @@ namespace PNet {
 			return PResult::P_GenericError;
 		}
 
+		if (Setblocking(false) != P_Success) {
+			return P_GenericError;
+		}
+
 		if (SetSocketOption(SocketOption::TCP_NoDelay, TRUE) != PResult::P_Success) {
 			return PResult::P_GenericError;
 		}
@@ -265,6 +269,18 @@ namespace PNet {
 			totalBytesReceived += bytesReceived;
 		}
 
+		return P_Success;
+	}
+
+	PResult Socket::Setblocking(bool isBlocking) {
+		unsigned long nonBlocking{ 1 };
+		unsigned long Blocking{ 0 };
+
+		int result = ioctlsocket(handle, FIONBIO, isBlocking ? &Blocking : &nonBlocking);
+		if (result == SOCKET_ERROR) {
+			int error = WSAGetLastError();
+			return P_GenericError;
+		}
 		return P_Success;
 	}
 
