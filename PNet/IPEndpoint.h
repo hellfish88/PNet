@@ -8,6 +8,7 @@ namespace PNet {
 	class IPEndpoint {
 		public:
 			IPEndpoint(const char* ip, unsigned short port);
+			IPEndpoint() {};
 			IPEndpoint(sockaddr* addr);
 			IPVersion GetIPVersion();
 			std::vector<uint8_t> getIPBytes();

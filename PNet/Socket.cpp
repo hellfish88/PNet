@@ -109,7 +109,7 @@ namespace PNet {
 		return P_Success;
 	}
 
-	PResult Socket::Accept(Socket& outSocket) {
+	PResult Socket::Accept(Socket& outSocket, IPEndpoint *endpoint) {
 		assert(ipversion == IPv4 || ipversion == IPv6);
 
 		if (ipversion == IPv4) {
@@ -121,9 +121,10 @@ namespace PNet {
 				return P_GenericError;
 			}
 
-			IPEndpoint newConnectionEndpoint((sockaddr*)&addr);
-			std::cout << "New connection accepted!" << std::endl;
-			newConnectionEndpoint.Print();
+			if (endpoint != nullptr) {
+				*endpoint = IPEndpoint((sockaddr*)&addr);
+			}
+
 			outSocket = Socket(IPv4, acceptedConnectionHandle);
 		} else {
 			sockaddr_in6 addr = {};
@@ -134,9 +135,9 @@ namespace PNet {
 				return P_GenericError;
 			}
 
-			IPEndpoint newConnectionEndpoint((sockaddr*)&addr);
-			std::cout << "New connection accepted!" << std::endl;
-			newConnectionEndpoint.Print();
+			if (endpoint != nullptr) {
+				*endpoint = IPEndpoint((sockaddr*)&addr);
+			}
 			outSocket = Socket(IPv6, acceptedConnectionHandle);
 		}
 

@@ -31,11 +31,18 @@ void Server::Frame() {
 
 	if (WSAPoll(&listeningSocketFD, 1, 1) > 0) {
 		if (listeningSocketFD.revents & POLLRDNORM) {
+
 			Socket newConnection;
-			if (listeningSocket.Accept(newConnection) == PResult::P_Success) {
+
+			IPEndpoint newConnectionEndpoint;
+
+			if (listeningSocket.Accept(newConnection, &newConnectionEndpoint) == PResult::P_Success) {
 				std::cout << "New connection accepted." << std::endl;
 
-				newConnection.Close();
+				TCPConnection acceptedConnection(newConnection, newConnectionEndpoint);
+				std::cout << acceptedConnection.ToString() << " - New connection accepted." << std::endl;
+				acceptedConnection.Close();
+
 			} else {
 				std::cerr << "Failed to accept new connection." << std::endl;
 			}
