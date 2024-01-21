@@ -1,13 +1,10 @@
 #pragma once
 
 #include "Socket.h"
+#include "PacketManager.h"
 
 namespace PNet {
 
-	enum PacketTask {
-		ProcessPacketSize,
-		ProcessPacketContents
-	};
 
 	class TCPConnection {
 		public:
@@ -15,9 +12,10 @@ namespace PNet {
 			void Close();
 			std::string ToString();
 			Socket socket;
-			PacketTask task = PacketTask::ProcessPacketSize;
-			int extractionOffset = 0;
-			uint16_t packetSize = 0;
+
+
+			PacketManager pm_incoming;
+			PacketManager pm_outgoing;
 			char buffer[g_MaxPacketSize];
 		private:
 			IPEndpoint endpoint;
