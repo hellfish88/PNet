@@ -10,6 +10,9 @@ class Server {
 		void Frame();
 	private: 
 		Socket listeningSocket;
+		bool ProcessPacket(Packet& packet);
+		void CloseConnection(int connectionIndex, std::string reason);
 		std::vector<TCPConnection> connections;
 		std::vector<WSAPOLLFD> master_fd;
+		std::vector<WSAPOLLFD> use_fd = master_fd;
 };
