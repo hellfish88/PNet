@@ -6,18 +6,20 @@
 
 int main() {
 
-	MyServer server;
+	if (Network::Initialize()) {
 
-	if (server.Initialize(IPEndpoint("::", 1337))) {
 
-		while (true) {
-			server.Frame();
+		MyServer server;
+
+		if (server.Initialize(IPEndpoint("::", 1337))) {
+
+			while (true) {
+				server.Frame();
+			}
 		}
 	}
-
 	Network::Shutdown();
 	system("Pause");
 
 	return 0;
 }
-
