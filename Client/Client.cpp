@@ -33,31 +33,52 @@ bool Client::IsConnected() {
 }
 
 bool Client::Frame() {
-	Packet stringPacket(PacketType::PT_ChatMessage);
-	stringPacket << std::string("This is my string packet!");
+	Packet incomingPacket;
 
-	Packet integersPacket(PacketType::PT_IntegerArray);
-	uint32_t arraySize = 6;
-	uint32_t integerArray[6] = { 2, 5, 7, 1, 2, 9 };
-	integersPacket << arraySize;
-	for (auto integer : integerArray) {
-		integersPacket << integer;
-	}
+	if (socket.Recv(incomingPacket) != P_Success) {
+		std::cout << "Lost connection" << std::endl;
+		isConnected = false;
+		return false;
+	} 
 
-	PResult result;
-
-	if (rand() % 2 == 0) {
-		result = socket.Send(stringPacket);
-	} else {
-		result = socket.Send(integersPacket);
-	}
-
-	if (result != PResult::P_Success) {
+	if (!ProcessPacket(incomingPacket)) {
 		isConnected = false;
 		return false;
 	}
 
-	std::cout << "Attempting to send chunk of data..." << std::endl;
-	Sleep(500);
+
 	return true;
+}
+
+bool Client::ProcessPacket(Packet &packet) {
+
+	switch (packet.GetPacketType()) {
+	case PT_ChatMessage: {
+		std::string chatmessage;
+		packet >> chatmessage;
+		std::cout << "Chat message: " << chatmessage << std::endl;
+		break;
+
+	}
+	case PT_IntegerArray: {
+		uint32_t arraySize{ 0 };
+		packet >> arraySize;
+		std::cout << "Array size: " << arraySize << std::endl;
+		for (uint32_t i = 0; i < arraySize; i++) {
+			uint32_t element = 0;
+			packet >> element;
+			std::cout << "Element[" << i << "]" << element << std::endl;
+		}
+		break;
+	}
+	case PT_Invalid: {
+		break;
+	}
+	default:
+		std::cout << "Unrecognized packet type: " << packet.GetPacketType() << std::endl;
+		return false;
+	}
+
+	return true;
+	
 }
